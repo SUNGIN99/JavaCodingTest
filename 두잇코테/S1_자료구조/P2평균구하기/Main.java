@@ -2,6 +2,7 @@ package 두잇코테.S1_자료구조.P2평균구하기;
 
 import java.util.Scanner;
 
+//https://www.acmicpc.net/problem/1546
 public class Main {
 
     public static void main(String[] args) {
