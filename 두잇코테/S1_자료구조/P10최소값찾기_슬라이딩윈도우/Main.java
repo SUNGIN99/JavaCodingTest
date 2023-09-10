@@ -16,9 +16,13 @@ import java.util.StringTokenizer;
             System.out.printf("%d ", a);
         }*/
 //https://www.acmicpc.net/problem/11003
-public class Main {
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.StringTokenizer;
 
-    public static final Scanner sc = new Scanner(System.in);
+public class Main {
 
     private static class Node{
         int index;
@@ -38,34 +42,41 @@ public class Main {
         }
     }
 
+
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        StringTokenizer st = new StringTokenizer(br.readLine());
+        StringTokenizer st = new StringTokenizer(bf.readLine());
 
         int N = Integer.parseInt(st.nextToken());
         int L = Integer.parseInt(st.nextToken());
 
-        st = new StringTokenizer(br.readLine());
+        int[] nums = new int[N];
 
-        Deque<Node> mydeque = new LinkedList<>();
-
-        for(int i = 0; i< N; i++){
-            int now = Integer.parseInt(st.nextToken());
-
-            while(!mydeque.isEmpty() && mydeque.getLast().value > now){
-                mydeque.removeLast();
-            }
-
-            mydeque.addLast(new Node(i, now));
-
-            if (mydeque.getFirst().index <= i - L){
-                mydeque.removeFirst();
-            }
-
-            bw.write(mydeque.getFirst().getValue() + " ");
+        st = new StringTokenizer(bf.readLine());
+        for(int i = 0; i<N; i++){
+            nums[i] = Integer.parseInt(st.nextToken());
         }
+
+        Deque<Node> stack = new LinkedList<>();
+        ArrayList<Integer> result = new ArrayList<>();
+        int i = 0;
+        while(i < N){
+
+            if (!stack.isEmpty() && stack.getLast().getValue() > nums[i]){
+                stack.removeLast();
+                continue;
+            }
+            if(!stack.isEmpty() && stack.getFirst().getIndex() <= i - L){
+                stack.removeFirst();
+            }
+
+            stack.addLast(new Node(i, nums[i]));
+            bw.write(stack.getFirst().getValue() + " ");
+            i ++;
+        }
+
         bw.flush();
         bw.close();
     }
