@@ -75,14 +75,9 @@ public class Main {
                 int newDist = currNode.stackedTime + node.time;
 
                 int nextNodeDistSize = distance[node.vertex].size();
-                if(nextNodeDistSize < k){
+                if(nextNodeDistSize < k || distance[node.vertex].get(k-1) > newDist){
                     binarySearchInsert(node.vertex, newDist);
                     queue.add(new Node(node.vertex, node.time, newDist));
-                }else{
-                     if(distance[node.vertex].get(k-1) > newDist){
-                         binarySearchInsert(node.vertex, newDist);
-                         queue.add(new Node(node.vertex, node.time, newDist));
-                     }
                 }
             }
         }
