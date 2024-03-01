@@ -16,18 +16,36 @@ public class Main {
         }
 
         int[] dp = new int[n];
-        int max = 0;
-        for(int i = 0; i<n; i++){
-            dp[i] = 1;
-            for(int j = 0; j<i; j++){
-                if(a[i] > a[j]){
-                    dp[i] = Math.max(dp[i], dp[j] + 1);
+        dp[0] = a[0];
+        int left, right, len = 1;
+        for(int i = 1; i<n; i++){
+            left = 0;
+            right = len - 1;
+            while(left <= right){
+                int mid = left + (right - left) / 2;
+
+                if(dp[mid] > a[i]){
+                    right = mid - 1;
+                }else if(dp[mid] < a[i]){
+                    left = mid + 1;
+                }else{
+                    left = mid;
+                    break;
                 }
             }
-            max = Math.max(max, dp[i]);
+
+            if(dp[left] == 0){
+                len++;
+            }
+            dp[left] = a[i];
+
+
+            //System.out.println(left + " : " + Arrays.toString(dp));
         }
 
-        System.out.println(max);
+        System.out.println(len);
+
+
 
     }
 
