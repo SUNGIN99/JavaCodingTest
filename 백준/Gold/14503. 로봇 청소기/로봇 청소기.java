@@ -1,7 +1,7 @@
 import java.util.*;
 import java.io.*;
 public class Main {
-
+    //https://www.acmicpc.net/board/view/114405
     static int n, m;
     static int[][] room;
     public static void main(String[] args) throws Exception {
