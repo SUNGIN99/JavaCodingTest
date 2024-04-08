@@ -1,7 +1,6 @@
 # [Gold III] 사다리 조작 - 15684 
 
 [문제 링크](https://www.acmicpc.net/problem/15684) 
-https://www.acmicpc.net/board/view/88359
 
 ### 성능 요약
 
