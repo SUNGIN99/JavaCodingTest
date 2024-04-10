@@ -1,6 +1,7 @@
 # [Platinum V] 큐빙 - 5373 
 
 [문제 링크](https://www.acmicpc.net/problem/5373) 
+반레 :https://www.acmicpc.net/board/view/71895
 
 ### 성능 요약
 
