@@ -58,7 +58,7 @@ public class Main {
         visited[row][col] = true;
         for(int i = 0; i<n; i++){
             for(int j = 0; j<m; j++){
-                if(!visited[i][j] && !nonTarget[i][j] && lab[i][j] != 1 && lab[i][j] !=2){
+                if(((i == row && j > col) || i > row) && lab[i][j] != 1 && lab[i][j] !=2){
                     checkWall(i, j, wallCount+1);
                 }
             }
