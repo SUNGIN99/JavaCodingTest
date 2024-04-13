@@ -37,8 +37,8 @@ public class Main{
         }
 
         int result1 = maxNum(number.get(0), 1, 0, ""+number.get(0));
-        int result2 = maxNum(getResult(number.get(0), operand.get(0), number.get(1)), 2, 1, "(" +number.get(0) + operand.get(0)+number.get(1) + ")");
-        System.out.println(Math.max(result1, result2));
+        //int result2 = maxNum(getResult(number.get(0), operand.get(0), number.get(1)), 2, 1, "(" +number.get(0) + operand.get(0)+number.get(1) + ")");
+        System.out.println(result1);
     }
 
     static int maxNum(int sum, int numIndex, int opIndex, String str){
