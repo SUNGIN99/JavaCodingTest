@@ -22,6 +22,8 @@ public class Main{
         int heads = 0;
         long makeNum = 0;
         while(makeNum < 9876543210L){
+            // 1 부터 시작해서 start~end 사이 맨 앞자리숫자가 더 작은거를 arr에 추가
+            // 그리고 자리수가 늘어날 때 마다 앞에 못오는 숫자가 있으므로 head숫자를 하나씩 올려줘서 for문 범위 좁히기
             for(int i = heads; i<=9; i++){
                 for(int index = start; index<= end; index++){
                     canNum = getHeadNum(nums.get(index));
