@@ -10,10 +10,7 @@ public class Main{
 
         int n = Integer.parseInt(st.nextToken());
 
-        long sum = 4;
-        for(int i = 2; i<=n; i++){
-            sum+= (i+3 - (i-1));
-        }
+        long sum = 4 * (long)n;
         System.out.println(sum);
 
     }
