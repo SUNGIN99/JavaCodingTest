@@ -29,6 +29,7 @@ public class Main {
             }
         }
 
+        //https://www.acmicpc.net/board/view/117046
         if(matrix[n-1][n-1] == 1){
             System.out.println(0);
             return;
