@@ -25,6 +25,7 @@ public class Main {
         }
     }
     static int n, m;
+    // 똑같은 경로에 서로 다른 비용의 간선이 2개 주어질 수도 있기 때문에 PriorityQueue 적용
     static HashMap<Integer,PriorityQueue<Bus>> busInfo;
 
     public static void main(String[] args) throws Exception {
