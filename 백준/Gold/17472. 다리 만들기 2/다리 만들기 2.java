@@ -172,13 +172,15 @@ public class Main{
         // spanning
         int cnt = 0;
         int result = 0;
-        while(!queue.isEmpty()){
+        while(!queue.isEmpty()){ // cnt < islandCount
             Vertex curv = queue.poll();
             //System.out.println(curv);
             int from = curv.from - 'a';
             int to = curv.to - 'a';
             int dist = curv.dist;
-
+            
+            //https://www.acmicpc.net/board/view/42657
+            //  더 연결 할 수 있는데 수의 방문한 섬의 개수만으로 했던 실수를 해결
             if(checkSame(from, to)){
                 continue;
             }
