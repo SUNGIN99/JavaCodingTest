@@ -25,6 +25,7 @@ public class Main {
 
         int q = Integer.parseInt(br.readLine());
 
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         for(int i = 0; i<q; i++){
             st = new StringTokenizer(br.readLine());
             char question = st.nextToken().toCharArray()[0];
@@ -34,20 +35,16 @@ public class Main {
             int[] fromAlphabets = alphabet[from];
             int[] toAlphabets = alphabet[to];
 
-            int [] betweenAlphabets = new int[26];
-            for(int j = 0; j<26; j++) {
-                betweenAlphabets[j] = toAlphabets[j] - fromAlphabets[j];
+            int index = question - 'a';
+            int between = toAlphabets[index] - fromAlphabets[index];
+
+            if(question == aa[from]){
+                between++;
             }
-            betweenAlphabets[aa[from] - 'a'] ++;
-
-            System.out.println(betweenAlphabets[question - 'a']);
-
+            bw.write(between+"\n");
 
         }
-
-
-
-
+        bw.flush();
     }
 
 }
