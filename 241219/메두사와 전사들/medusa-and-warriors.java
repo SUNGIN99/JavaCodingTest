@@ -95,7 +95,7 @@ n줄에 걸쳐 마을 도로 정보
         }
 
         for(Warrior war : warriors){
-            matrix[war.x][war.y] = 3; // warrior = 3
+            matrix[war.x][war.y] = 1; // warrior = 3
         }
 
         matrix[sr][sc] = -1;
@@ -112,13 +112,170 @@ n줄에 걸쳐 마을 도로 정보
     static int warMove, warDied, warAttack;
 
     static void medusaAttack(){
-        // 행마다(x마다) 열이 양쪽으로 + 2씩 되된다. 어느한쪽이 처음 혹은 마지막 열이 될때까지
         int curx = sr, cury = sc;
+        int attackCount = 0;
+
+        List<int[]> au = medusaAttackUp();
+        List<int[]> ad = medusaAttackDown();
+        List<int[]> al = medusaAttackLeft();
+        List<int[]> ar = medusaAttackRight();
 
 
 
 
+    }
 
+    static List<int[]> medusaAttackRight(){
+        int curx = sr, cury = sc;
+        int attackCount = 0;
+        int index;
+
+        List<int[]> war = new ArrayList<>();
+        // 왼
+        for(int i = sc-1; i>=0; i--){
+            if(matrix[curx][i] == 1){
+                war.add(new int[]{curx, i});
+                break;
+            }
+        }
+
+        index = sc+1;
+        for(int i = sr + 1; i<n; i++){
+            for(int j = index; j<n; j++){
+                if(matrix[i][j] == 1){
+                    war.add(new int[]{i, j});
+                    break;
+                }
+            }
+            index++;
+        }
+
+        index = sc+1;
+        for(int i = sr -1; i>=0; i--){
+            for(int j = index; j<n; j++){
+                if(matrix[i][j] == 1){
+                    war.add(new int[]{i, j});
+                    break;
+                }
+            }
+            index++;
+        }
+
+        return war;
+    }
+
+    static List<int[]> medusaAttackLeft(){
+        int curx = sr, cury = sc;
+        int attackCount = 0;
+        int index;
+
+        List<int[]> war = new ArrayList<>();
+        // 왼
+        for(int i = sc-1; i>=0; i--){
+            if(matrix[curx][i] == 1){
+                war.add(new int[]{curx, i});
+                break;
+            }
+        }
+
+        index = sc-1;
+        for(int i = sr + 1; i<n; i++){
+            for(int j = index; j>=0; j--){
+                if(matrix[i][j] == 1){
+                    war.add(new int[]{i, j});
+                    break;
+                }
+            }
+            index--;
+        }
+
+        index = sc-1;
+        for(int i = sr -1; i>=0; i--){
+            for(int j = index; j>=0; j--){
+                if(matrix[i][j] == 1){
+                    war.add(new int[]{i, j});
+                    break;
+                }
+            }
+            index--;
+        }
+
+        return war;
+    }
+
+    static List<int[]> medusaAttackDown(){
+        int curx = sr, cury = sc;
+        int attackCount = 0;
+        int index;
+
+        List<int[]> war = new ArrayList<>();
+
+        // 아래
+        for(int i = sr+1; i<n; i++){
+            if(matrix[i][cury] == 1){
+                war.add(new int[]{i, cury});
+                break;
+            }
+        }
+        index = sr + 1;
+        for(int j = sc + 1; j<n; j++){
+            for(int i = index; i<n; i++){
+                if(matrix[i][j] == 1){
+                    war.add(new int[]{i, j});
+                    break;
+                }
+            }
+            index++;
+        }
+        index = sr + 1;
+        for(int j = sc - 1; j>=0; j--){
+            for(int i = index; i<n; i++){
+                if(matrix[i][j] == 1){
+                    war.add(new int[]{i, j});
+                    break;
+                }
+            }
+            index++;
+        }
+
+        return war;
+    }
+
+    static List<int[]> medusaAttackUp(){
+        int curx = sr, cury = sc;
+        int attackCount = 0;
+
+        int index;
+        List<int[]> war = new ArrayList<>();
+
+        // 위
+        for(int i = sr-1; i>=0; i--){
+            if(matrix[i][cury] == 1){
+                war.add(new int[]{i, cury});
+                break;
+            }
+        }
+        index = sr - 1;
+        for(int j = sc + 1; j<n; j++){
+            for(int i = index; i>=0; i--){
+                if(matrix[i][j] == 1){
+                    war.add(new int[]{i, j});
+                    break;
+                }
+            }
+            index--;
+        }
+        index = sr - 1;
+        for(int j = sc - 1; j>=0; j--){
+            for(int i = index; i>=0; i--){
+                if(matrix[i][j] == 1){
+                    war.add(new int[]{i, j});
+                    break;
+                }
+            }
+            index--;
+        }
+        return war;
     }
 
     static void medusaMove(char p){
