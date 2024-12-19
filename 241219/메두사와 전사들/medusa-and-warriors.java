@@ -1,3 +1,5 @@
+package Cote;
+
 import java.io.*;
 import java.util.*;
 
@@ -101,20 +103,24 @@ public class Main {
         matrix[sr][sc] = -1;
         int lastCheck = 1;
         for(char p : paths.peek().toString().toCharArray()){
-            /*for(int i = 0; i<n; i++){
+            for(int i = 0; i<n; i++){
                 System.out.println(Arrays.toString(matrix[i]));
             }
-            System.out.println();*/
+            System.out.println();
             warMove = 0; warStone = 0; warAttack = 0;
             // 1) 뱀 이동
             medusaMove(p);
             // 2) 뱀 공격
             HashSet<String> stopped = medusaAttack();
+            for(int i = 0; i<n; i++){
+                System.out.println(Arrays.toString(stonedArea[i]));
+            }
             // 3) 전사 이동 & 전사공격
+            System.out.println(stopped);
             warriorMove(stopped);
 
             System.out.println(warMove + " " + warStone + " " + warAttack);
-            //System.out.println();
+            System.out.println();
             lastCheck ++;
 
             if(lastCheck == paths.peek().toString().length()){
