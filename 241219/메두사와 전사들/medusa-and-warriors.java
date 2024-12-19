@@ -1,38 +1,40 @@
+package Cote;
+
 import java.io.*;
 import java.util.*;
 
 public class Main {
 
-/*
-4 <= n <=50
-0 <= m <= 300
-마을의 크기 N, 전사의 수 M
-메두사 위치 정보 sr, sc 공원 위치정보 er, ec
-m명의 전사들의 좌표 a1r, a1c, a2r, a2c
-n줄에 걸쳐 마을 도로 정보
-4 4
-1 3 3 3
-3 1 0 3 1 0 2 2
-0 0 0 0
-0 0 0 0
-0 0 1 1
-1 0 0 0
+    /*
+    4 <= n <=50
+    0 <= m <= 300
+    마을의 크기 N, 전사의 수 M
+    메두사 위치 정보 sr, sc 공원 위치정보 er, ec
+    m명의 전사들의 좌표 a1r, a1c, a2r, a2c
+    n줄에 걸쳐 마을 도로 정보
+    4 4
+    1 3 3 3
+    3 1 0 3 1 0 2 2
+    0 0 0 0
+    0 0 0 0
+    0 0 1 1
+    1 0 0 0
 
-4 2 2
-0 2 0
-1 1 1
-0 0 0
-0 0 0
-0
-턴마다 전사가 이동한 거리의 합, 메두사로 인해 돌이 된 전사의 수, 메두사를 공격한 전사의 수
-메두사가 도착하면 0을 출력하고 프로그램 종료.
-메두사가 집으로부터 공원까지 이어지는 도로가 존재하지 않는다면 -1
+    4 2 2
+    0 2 0
+    1 1 1
+    0 0 0
+    0 0 0
+    0
+    턴마다 전사가 이동한 거리의 합, 메두사로 인해 돌이 된 전사의 수, 메두사를 공격한 전사의 수
+    메두사가 도착하면 0을 출력하고 프로그램 종료.
+    메두사가 집으로부터 공원까지 이어지는 도로가 존재하지 않는다면 -1
 
-메두사 이동, 시선, 전사 이동, 전사공격 => 한 턴
-맨해튼거리로 전사이동
+    메두사 이동, 시선, 전사 이동, 전사공격 => 한 턴
+    맨해튼거리로 전사이동
 
-// 뱀 -> 상하좌우 우선순위로 먼저 이동
-*/
+    // 뱀 -> 상하좌우 우선순위로 먼저 이동
+    */
     static class Warrior{
         int x, y;
         Warrior(int x, int y){
@@ -97,43 +99,328 @@ n줄에 걸쳐 마을 도로 정보
         for(Warrior war : warriors){
             matrix[war.x][war.y] = 1; // warrior = 3
         }
-
+        //System.out.println(paths);
         matrix[sr][sc] = -1;
+        int lastCheck = 1;
         for(char p : paths.peek().toString().toCharArray()){
-            warMove = 0; warDied = 0; warAttack = 0;
+            /*for(int i = 0; i<n; i++){
+                System.out.println(Arrays.toString(matrix[i]));
+            }
+            System.out.println();*/
+            warMove = 0; warStone = 0; warAttack = 0;
             // 1) 뱀 이동
             medusaMove(p);
-
             // 2) 뱀 공격
-            medusaAttack();
+            HashSet<String> stopped = medusaAttack();
+            // 3) 전사 이동 & 전사공격
+            warriorMove(stopped);
+
+            System.out.println(warMove + " " + warStone + " " + warAttack);
+            //System.out.println();
+            lastCheck ++;
+
+            if(lastCheck == paths.peek().toString().length()){
+                System.out.println("0");
+                break;
+            }
         }
     }
 
-    static int warMove, warDied, warAttack;
+    static int warMove, warStone, warAttack;
 
-    static void medusaAttack(){
+    static void warriorMove(HashSet<String> stopped){
+        int medusaX = sr, medusaY = sc;
+
+        int[][] movedMatrix = new int[n][];
+        for(int i = 0; i<n; i++){
+            movedMatrix[i] = new int[n];
+        }
+
+        for(int i = 0; i<n; i++){
+            for(int j = 0; j<n; j++){
+                if(matrix[i][j] >= 1){
+                    int minPath = Integer.MAX_VALUE;
+                    int manHuton = 0;
+                    int targetx=0, targety=0;
+                    int up1 = i-1, up2 = i-2, down1 = i+1, down2 = i+2;
+                    int left1 = j-1, left2 = j-2, right1 = j + 1, right2 =j+2;
+
+                    // up1
+                    if(isValid2(up1, j) && !stonedArea[up1][j]){
+                        manHuton = Math.abs(sr - up1) + Math.abs(sc- j);
+                        if(manHuton < minPath){
+                            targetx = up1;
+                            targety = j;
+                            minPath = manHuton;
+                        }
+                    }
+                    // up2,j
+                    if(isValid2(up2, j) && !stonedArea[up2][j]){
+                        manHuton = Math.abs(sr - up2) + Math.abs(sc- j);
+                        if(manHuton < minPath){
+                            targetx = up2;
+                            targety = j;
+                            minPath = manHuton;
+                        }
+                    }
+                    // up1, left1
+                    if(isValid2(up1, left1) && !stonedArea[up1][left1]){
+                        manHuton = Math.abs(sr - up1) + Math.abs(sc- left1);
+                        if(manHuton < minPath){
+                            targetx = up1;
+                            targety = left1;
+                            minPath = manHuton;
+                        }
+                    }
+                    // up1, right1
+                    if(isValid2(up1, right1) && !stonedArea[up1][right1]){
+                        manHuton = Math.abs(sr - up1) + Math.abs(sc- right1);
+                        if(manHuton < minPath){
+                            targetx = up1;
+                            targety = right1;
+                            minPath = manHuton;
+                        }
+                    }
+                    //down1
+                    if(isValid2(down1, j)&& !stonedArea[down1][j]){
+                        manHuton = Math.abs(sr - down1) + Math.abs(sc- j);
+                        if(manHuton < minPath){
+                            targetx = down1;
+                            targety = j;
+                            minPath = manHuton;
+                        }
+                    }
+                    // down2, j
+                    if(isValid2(down2, j)&& !stonedArea[down2][j]){
+                        manHuton = Math.abs(sr - down2) + Math.abs(sc- j);
+                        if(manHuton < minPath){
+                            targetx = down2;
+                            targety = j;
+                            minPath = manHuton;
+                        }
+                    }
+                    // down1, left1
+                    if(isValid2(down1, left1) && !stonedArea[down1][left1]){
+                        manHuton = Math.abs(sr - down1) + Math.abs(sc- left1);
+                        if(manHuton < minPath){
+                            targetx = down1;
+                            targety = left1;
+                            minPath = manHuton;
+                        }
+                    }
+                    // down1, right1
+                    if(isValid2(down1, right1) && !stonedArea[down1][right1]){
+                        manHuton = Math.abs(sr - down1) + Math.abs(sc- right1);
+                        if(manHuton < minPath){
+                            targetx = down1;
+                            targety = right1;
+                            minPath = manHuton;
+                        }
+                    }
+                    // i, left1
+                    if(isValid2(i, left1) && !stonedArea[i][left1]){
+                        manHuton = Math.abs(sr - i) + Math.abs(sc- left1);
+                        if(manHuton < minPath){
+                            targetx = i;
+                            targety = left1;
+                            minPath = manHuton;
+                        }
+                    }
+                    // i, left2
+                    if(isValid2(i, left2) && !stonedArea[i][left2]){
+                        manHuton = Math.abs(sr - i) + Math.abs(sc- left2);
+                        if(manHuton < minPath){
+                            targetx = i;
+                            targety = left2;
+                            minPath = manHuton;
+                        }
+                    }
+                    // i, right1
+                    if(isValid2(i, right1) && !stonedArea[i][right1]){
+                        manHuton = Math.abs(sr - i) + Math.abs(sc- right1);
+                        if(manHuton < minPath){
+                            targetx = i;
+                            targety = right1;
+                            minPath = manHuton;
+                        }
+                    }
+                    // i, right2
+                    if(isValid2(i, right2) && !stonedArea[i][right2]){
+                        manHuton = Math.abs(sr - i) + Math.abs(sc- right2);
+                        if(manHuton < minPath){
+                            targetx = i;
+                            targety = right2;
+                            minPath = manHuton;
+                        }
+                    }
+
+                    if(stopped.contains(i+","+j)){
+                        movedMatrix[i][j] += matrix[i][j];
+                    }else{
+
+                        //System.out.println("(warrior)" + "("+i+"," + j+") -> "+targetx + ", " + targety + " : " + manHuton);
+                        if(matrix[targetx][targety] == -1){
+                            warAttack += matrix[i][j];
+                        }else{
+                            movedMatrix[targetx][targety] += matrix[i][j];
+                        }
+                        warMove += matrix[i][j] * (Math.abs(targetx - i) + Math.abs(targety - j));
+                    }
+                }
+            }
+        }
+
+        movedMatrix[sr][sc] = -1;
+        matrix = movedMatrix;
+    }
+
+    static boolean isValid2(int xx, int yy){
+        if(xx < 0 || xx >=n || yy <0 || yy >= n){
+            return false;
+        }
+        return true;
+    }
+
+    static HashSet<String> medusaAttack(){
         int curx = sr, cury = sc;
         int attackCount = 0;
 
-        List<int[]> au = medusaAttackUp();
-        List<int[]> ad = medusaAttackDown();
-        List<int[]> al = medusaAttackLeft();
-        List<int[]> ar = medusaAttackRight();
+        List<int[]>[] warr = new List[4];
 
+        warr[0] = medusaAttackUp();
+        warr[1] = medusaAttackDown();
+        warr[2] = medusaAttackLeft();
+        warr[3] = medusaAttackRight();
 
+        List<int[]> makeAtt = new ArrayList<>();
+        for(int i = 0; i<4; i++){
+            if (makeAtt.size() < warr[i].size()) {
+                makeAtt = warr[i];
+                cantgo(i);
+            }
+        }
 
+        HashSet<String> set = new HashSet<>();
+        for(int[] at : makeAtt){
+            set.add(at[0]+","+at[1]);
+            warStone ++;
+        }
 
+        return set;
+    }
+
+    static boolean[][] stonedArea;
+    static void cantgo(int dir){
+        stonedArea = new boolean[n][];
+        for(int i = 0; i<n; i++){
+            stonedArea[i] = new boolean[n];
+        }
+
+        if(dir == 0){ // up
+            int curx = sr, cury = sc;
+            int index;
+
+            // 위
+            for(int i = sr-1; i>=0; i--){
+                stonedArea[i][cury] = true;
+            }
+            index = sr - 1;
+            for(int j = sc + 1; j<n; j++){
+                for(int i = index; i>=0; i--){
+                   stonedArea[i][j] = true;
+                }
+                index--;
+            }
+            index = sr - 1;
+            for(int j = sc - 1; j>=0; j--){
+                for(int i = index; i>=0; i--){
+                    stonedArea[i][j] = true;
+                }
+                index--;
+            }
+        } else if (dir == 1) { // down
+            int curx = sr, cury = sc;
+            int index;
+
+            // 아래
+            for(int i = sr+1; i<n; i++){
+                stonedArea[i][cury] = true;
+            }
+            index = sr + 1;
+            for(int j = sc + 1; j<n; j++){
+                for(int i = index; i<n; i++){
+                    stonedArea[i][j] = true;
+                }
+                index++;
+            }
+            index = sr + 1;
+            for(int j = sc - 1; j>=0; j--){
+                for(int i = index; i<n; i++){
+                    stonedArea[i][j] = true;
+                }
+                index++;
+            }
+        } else if (dir == 2) { // left
+            int curx = sr, cury = sc;
+            int index;
+
+            // 왼
+            for(int i = sc-1; i>=0; i--){
+                stonedArea[curx][i] = true;
+            }
+
+            index = sc-1;
+            for(int i = sr + 1; i<n; i++){
+                for(int j = index; j>=0; j--){
+                    stonedArea[i][j] = true;
+                }
+                index--;
+            }
+
+            index = sc-1;
+            for(int i = sr -1; i>=0; i--){
+                for(int j = index; j>=0; j--){
+                    stonedArea[i][j] = true;
+                }
+                index--;
+            }
+        } else if (dir == 3) { // right
+            int curx = sr, cury = sc;
+            int index;
+
+            // 우
+            for(int i = sc+1; i<n; i++){
+                stonedArea[curx][i] = true;
+            }
+
+            index = sc+1;
+            for(int i = sr + 1; i<n; i++){
+                for(int j = index; j<n; j++){
+                   stonedArea[i][j] =true;
+                }
+                index++;
+            }
+
+            index = sc+1;
+            for(int i = sr -1; i>=0; i--){
+                for(int j = index; j<n; j++){
+                    stonedArea[i][j] =true;
+                }
+                index++;
+            }
+        }
     }
 
     static List<int[]> medusaAttackRight(){
         int curx = sr, cury = sc;
         int attackCount = 0;
         int index;
+        int attX = -1, attY= -1;
 
         List<int[]> war = new ArrayList<>();
-        // 왼
-        for(int i = sc-1; i>=0; i--){
-            if(matrix[curx][i] == 1){
+        // 우
+        for(int i = sc+1; i<n; i++){
+            if(matrix[curx][i] >= 1){
                 war.add(new int[]{curx, i});
                 break;
             }
@@ -142,8 +429,13 @@ n줄에 걸쳐 마을 도로 정보
         index = sc+1;
         for(int i = sr + 1; i<n; i++){
             for(int j = index; j<n; j++){
-                if(matrix[i][j] == 1){
+                if(attX != -1 && attY != -1 && (Math.abs(attX - i) == Math.abs(attY - j))){
+                    break;
+                }
+                if(matrix[i][j] >= 1){
                     war.add(new int[]{i, j});
+                    attX = i;
+                    attY = j;
                     break;
                 }
             }
@@ -151,10 +443,16 @@ n줄에 걸쳐 마을 도로 정보
         }
 
         index = sc+1;
+        attX = -1; attY = -1;
         for(int i = sr -1; i>=0; i--){
             for(int j = index; j<n; j++){
-                if(matrix[i][j] == 1){
+                if(attX != -1 && attY != -1 && (Math.abs(attX - i) == Math.abs(attY - j))){
+                    break;
+                }
+                if(matrix[i][j] >= 1){
                     war.add(new int[]{i, j});
+                    attX = i;
+                    attY = j;
                     break;
                 }
             }
@@ -168,11 +466,12 @@ n줄에 걸쳐 마을 도로 정보
         int curx = sr, cury = sc;
         int attackCount = 0;
         int index;
+        int attX = -1, attY= -1;
 
         List<int[]> war = new ArrayList<>();
         // 왼
         for(int i = sc-1; i>=0; i--){
-            if(matrix[curx][i] == 1){
+            if(matrix[curx][i] >= 1){
                 war.add(new int[]{curx, i});
                 break;
             }
@@ -181,8 +480,14 @@ n줄에 걸쳐 마을 도로 정보
         index = sc-1;
         for(int i = sr + 1; i<n; i++){
             for(int j = index; j>=0; j--){
-                if(matrix[i][j] == 1){
+                if(attX != -1 && attY != -1 && (Math.abs(attX - i) == Math.abs(attY - j))){
+                    break;
+                }
+
+                if(matrix[i][j] >= 1){
                     war.add(new int[]{i, j});
+                    attX = i;
+                    attY = j;
                     break;
                 }
             }
@@ -190,9 +495,10 @@ n줄에 걸쳐 마을 도로 정보
         }
 
         index = sc-1;
+        attX = -1; attY = -1;
         for(int i = sr -1; i>=0; i--){
             for(int j = index; j>=0; j--){
-                if(matrix[i][j] == 1){
+                if(matrix[i][j] >= 1){
                     war.add(new int[]{i, j});
                     break;
                 }
@@ -207,12 +513,13 @@ n줄에 걸쳐 마을 도로 정보
         int curx = sr, cury = sc;
         int attackCount = 0;
         int index;
+        int attX = -1, attY= -1;
 
         List<int[]> war = new ArrayList<>();
 
         // 아래
         for(int i = sr+1; i<n; i++){
-            if(matrix[i][cury] == 1){
+            if(matrix[i][cury] >= 1){
                 war.add(new int[]{i, cury});
                 break;
             }
@@ -220,18 +527,30 @@ n줄에 걸쳐 마을 도로 정보
         index = sr + 1;
         for(int j = sc + 1; j<n; j++){
             for(int i = index; i<n; i++){
-                if(matrix[i][j] == 1){
+                if(attX != -1 && attY != -1 && (Math.abs(attX - i) == Math.abs(attY - j))){
+                    break;
+                }
+
+                if(matrix[i][j] >= 1){
                     war.add(new int[]{i, j});
+                    attX = i;
+                    attY = j;
                     break;
                 }
             }
             index++;
         }
         index = sr + 1;
+        attX = -1; attY = -1;
         for(int j = sc - 1; j>=0; j--){
             for(int i = index; i<n; i++){
-                if(matrix[i][j] == 1){
+                if(attX != -1 && attY != -1 && (Math.abs(attX - i) == Math.abs(attY - j))){
+                    break;
+                }
+                if(matrix[i][j] >= 1){
                     war.add(new int[]{i, j});
+                    attX = i;
+                    attY = j;
                     break;
                 }
             }
@@ -245,12 +564,14 @@ n줄에 걸쳐 마을 도로 정보
         int curx = sr, cury = sc;
         int attackCount = 0;
 
+        int attX = -1, attY= -1;
+
         int index;
         List<int[]> war = new ArrayList<>();
 
         // 위
         for(int i = sr-1; i>=0; i--){
-            if(matrix[i][cury] == 1){
+            if(matrix[i][cury] >= 1){
                 war.add(new int[]{i, cury});
                 break;
             }
@@ -258,18 +579,31 @@ n줄에 걸쳐 마을 도로 정보
         index = sr - 1;
         for(int j = sc + 1; j<n; j++){
             for(int i = index; i>=0; i--){
-                if(matrix[i][j] == 1){
+                if(attX != -1 && attY != -1 && (Math.abs(attX - i) == Math.abs(attY - j))){
+                    break;
+                }
+
+                if(matrix[i][j] >= 1){
                     war.add(new int[]{i, j});
+                    attX = i;
+                    attY = j;
                     break;
                 }
             }
             index--;
         }
         index = sr - 1;
+        attX = -1; attY = -1;
         for(int j = sc - 1; j>=0; j--){
             for(int i = index; i>=0; i--){
-                if(matrix[i][j] == 1){
+                if(attX != -1 && attY != -1 && (Math.abs(attX - i) == Math.abs(attY - j))){
+                    break;
+                }
+
+                if(matrix[i][j] >= 1){
                     war.add(new int[]{i, j});
+                    attX = i;
+                    attY = j;
                     break;
                 }
             }
@@ -292,8 +626,10 @@ n줄에 걸쳐 마을 도로 정보
         }
 
         matrix[sr][sc] = 0;
-        warDied += matrix[movedx][movedy];
         matrix[movedx][movedy] = -1;
+
+        sr=movedx;
+        sc=movedy;
     }
 
     static class Medusa{
