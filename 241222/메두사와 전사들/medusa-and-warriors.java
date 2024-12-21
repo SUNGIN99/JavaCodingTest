@@ -1,4 +1,5 @@
 
+
 import java.io.*;
 import java.util.*;
 
@@ -152,7 +153,7 @@ public class Main {
                     int targetx=0, targety=0;
                     int up1 = i-1, up2 = i-2, down1 = i+1, down2 = i+2;
                     int left1 = j-1, left2 = j-2, right1 = j + 1, right2 =j+2;
-
+                    int where = 0;
 
                     if(isValid2(i,j) && !stonedArea[i][j]){
                         manHuton = Math.abs(sr-i) + Math.abs(sc-j);
@@ -160,6 +161,7 @@ public class Main {
                             targetx = i;
                             targety = j;
                             minPath = manHuton;
+                            where = -1;
                         }
                     }
 
@@ -170,6 +172,7 @@ public class Main {
                             targetx = up1;
                             targety = j;
                             minPath = manHuton;
+                            where = 2;
                         }
                     }
 
@@ -180,6 +183,7 @@ public class Main {
                             targetx = up1;
                             targety = left1;
                             minPath = manHuton;
+                            where = 3;
                         }
                     }
 
@@ -190,6 +194,7 @@ public class Main {
                             targetx = up1;
                             targety = right1;
                             minPath = manHuton;
+                            where =4;
                         }
                     }
 
@@ -200,6 +205,7 @@ public class Main {
                             targetx = up2;
                             targety = j;
                             minPath = manHuton;
+                            where =5;
                         }
                     }
 
@@ -210,6 +216,7 @@ public class Main {
                             targetx = down1;
                             targety = j;
                             minPath = manHuton;
+                            where =6;
                         }
                     }
 
@@ -220,6 +227,7 @@ public class Main {
                             targetx = down1;
                             targety = left1;
                             minPath = manHuton;
+                            where =7;
                         }
                     }
 
@@ -230,6 +238,7 @@ public class Main {
                             targetx = down1;
                             targety = right1;
                             minPath = manHuton;
+                            where =8;
                         }
                     }
 
@@ -240,6 +249,7 @@ public class Main {
                             targetx = down2;
                             targety = j;
                             minPath = manHuton;
+                            where =9;
                         }
                     }
 
@@ -250,6 +260,7 @@ public class Main {
                             targetx = i;
                             targety = left1;
                             minPath = manHuton;
+                            where =10;
                         }
                     }
 
@@ -260,6 +271,7 @@ public class Main {
                             targetx = i;
                             targety = left2;
                             minPath = manHuton;
+                            where =11;
                         }
                     }
 
@@ -270,6 +282,7 @@ public class Main {
                             targetx = up1;
                             targety = left1;
                             minPath = manHuton;
+                            where =12;
                         }
                     }
 
@@ -280,6 +293,7 @@ public class Main {
                             targetx = down1;
                             targety = left1;
                             minPath = manHuton;
+                            where =13;
                         }
                     }
 
@@ -290,6 +304,7 @@ public class Main {
                             targetx = i;
                             targety = right1;
                             minPath = manHuton;
+                            where =14;
                         }
                     }
 
@@ -300,6 +315,7 @@ public class Main {
                             targetx = i;
                             targety = right2;
                             minPath = manHuton;
+                            where =15;
                         }
                     }
 
@@ -310,6 +326,7 @@ public class Main {
                             targetx = up1;
                             targety = right1;
                             minPath = manHuton;
+                            where =16;
                         }
                     }
 
@@ -320,6 +337,7 @@ public class Main {
                             targetx = down1;
                             targety = right1;
                             minPath = manHuton;
+                            where =17;
                         }
                     }
 
@@ -327,11 +345,12 @@ public class Main {
                         movedMatrix[i][j] += matrix[i][j];
                     }else{
 
-                        //System.out.println("(warrior)" + "("+i+"," + j+") -> "+targetx + ", " + targety + " : " + manHuton);
+                        //
                         if(matrix[targetx][targety] == -1){
                             warAttack += matrix[i][j];
                         }else{
                             movedMatrix[targetx][targety] += matrix[i][j];
+                            //System.out.println("(warrior)" + where + "::: " + "("+i+"," + j+") -> "+targetx + ", " + targety + " : " + manHuton);
                             //System.out.println("warriorMove : " + targetx + ", " + targety);
                         }
                         warMove += matrix[i][j] * (Math.abs(targetx - i) + Math.abs(targety - j));
@@ -420,7 +439,7 @@ public class Main {
         HashSet<String> set = new HashSet<>();
         for(int[] at : makeAtt){
             set.add(at[0]+","+at[1]);
-            warStone ++;
+            warStone += matrix[at[0]][at[1]];
         }
 
         return set;
