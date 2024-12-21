@@ -1,5 +1,4 @@
 
-
 import java.io.*;
 import java.util.*;
 
@@ -371,54 +370,25 @@ public class Main {
     }
 
     static boolean[][] stonnedUp, stonnedDown, stonnedLeft, stonnedRight;
+    static int stCount[];
     static HashSet<String> medusaAttack(){
         int curx = sr, cury = sc;
         int attackCount = 0;
 
         List<int[]>[] warr = new List[4];
 
+        stCount = new int[4];
+
         warr[0] = medusaAttackUp();
         warr[1] = medusaAttackDown();
         warr[2] = medusaAttackLeft();
         warr[3] = medusaAttackRight();
 
-        /*for(int i = 0; i<n; i++){
-            for(int j = 0; j<n; j++){
-                System.out.print(stonnedUp[i][j]? "돌 ": "O  ");
-            }
-            System.out.println();
-        }
-        System.out.println();
-
-        for(int i = 0; i<n; i++){
-            for(int j = 0; j<n; j++){
-                System.out.print(stonnedDown[i][j]? "돌 ": "O  ");
-            }
-            System.out.println();
-        }
-        System.out.println();
-
-        for(int i = 0; i<n; i++){
-            for(int j = 0; j<n; j++){
-                System.out.print(stonnedLeft[i][j]? "돌 ": "O  ");
-            }
-            System.out.println();
-        }
-        System.out.println();
-        for(int i = 0; i<n; i++){
-            for(int j = 0; j<n; j++){
-                System.out.print(stonnedRight[i][j]? "돌 ": "O  ");
-            }
-            System.out.println();
-        }*/
-
-
-
-        List<int[]> makeAtt = new ArrayList<>();
-        int stoned = -1;
-        for(int i = 0; i<4; i++){
-            if (makeAtt.size() < warr[i].size()) {
-                makeAtt = warr[i];
+        int stoned = 0;
+        int maxStone = stCount[0];
+        for(int i = 1; i<4; i++){
+            if (maxStone < stCount[i]) {
+                maxStone = stCount[i];
                 stoned = i;
             }
         }
@@ -437,7 +407,7 @@ public class Main {
 
 
         HashSet<String> set = new HashSet<>();
-        for(int[] at : makeAtt){
+        for(int[] at : warr[stoned]){
             set.add(at[0]+","+at[1]);
             warStone += matrix[at[0]][at[1]];
         }
@@ -463,6 +433,7 @@ public class Main {
             stonnedRight[curx][i] = true;
             if(matrix[curx][i] >= 1){
                 war.add(new int[]{curx, i});
+                stCount[3] += matrix[curx][i];
                 break;
             }
         }
@@ -478,6 +449,7 @@ public class Main {
                     war.add(new int[]{i, j});
                     attX = i;
                     attY = j;
+                    stCount[3] += matrix[i][j];
                     break;
                 }
             }
@@ -496,6 +468,7 @@ public class Main {
                     war.add(new int[]{i, j});
                     attX = i;
                     attY = j;
+                    stCount[3] += matrix[i][j];
                     break;
                 }
             }
@@ -522,6 +495,7 @@ public class Main {
             stonnedLeft[curx][i] = true;
             if(matrix[curx][i] >= 1){
                 war.add(new int[]{curx, i});
+                stCount[2] += matrix[curx][i];
                 break;
             }
         }
@@ -537,6 +511,7 @@ public class Main {
                     war.add(new int[]{i, j});
                     attX = i;
                     attY = j;
+                    stCount[2] += matrix[i][j];
                     break;
                 }
             }
@@ -555,6 +530,7 @@ public class Main {
                     war.add(new int[]{i, j});
                     attX = i;
                     attY = j;
+                    stCount[2] += matrix[i][j];
                     break;
                 }
             }
@@ -581,6 +557,7 @@ public class Main {
             stonnedDown[i][cury] = true;
             if(matrix[i][cury] >= 1){
                 war.add(new int[]{i, cury});
+                stCount[1]+= matrix[i][cury];
                 break;
             }
         }
@@ -595,6 +572,7 @@ public class Main {
                     war.add(new int[]{i, j});
                     attX = i;
                     attY = j;
+                    stCount[1] += matrix[i][j];
                     break;
                 }
             }
@@ -612,6 +590,7 @@ public class Main {
                     war.add(new int[]{i, j});
                     attX = i;
                     attY = j;
+                    stCount[1] += matrix[i][j];
                     break;
                 }
             }
@@ -640,6 +619,7 @@ public class Main {
             stonnedUp[i][cury] = true;
             if(matrix[i][cury] >= 1){
                 war.add(new int[]{i, cury});
+                stCount[0] += matrix[i][cury];
                 break;
             }
         }
@@ -654,6 +634,7 @@ public class Main {
                     war.add(new int[]{i, j});
                     attX = i;
                     attY = j;
+                    stCount[0] += matrix[i][j];
                     break;
                 }
             }
@@ -671,6 +652,7 @@ public class Main {
                     war.add(new int[]{i, j});
                     attX = i;
                     attY = j;
+                    stCount[0] += matrix[i][j];
                     break;
                 }
             }
