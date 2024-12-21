@@ -175,6 +175,39 @@ public class Main {
                         }
                     }
 
+                    // down1
+                    if(isValid2(down1, j) && !stonedArea[down1][j]){
+                        manHuton = Math.abs(sr - down1) + Math.abs(sc - j);
+                        if(manHuton < minPath){
+                            targetx = down1;
+                            targety = j;
+                            minPath = manHuton;
+                            where =6;
+                        }
+                    }
+
+                    // left1
+                    if(isValid2(i, left1) && !stonedArea[i][left1]){
+                        manHuton = Math.abs(sr - i) + Math.abs(sc - left1);
+                        if(manHuton < minPath){
+                            targetx = i;
+                            targety = left1;
+                            minPath = manHuton;
+                            where =10;
+                        }
+                    }
+
+                    // right1
+                    if(isValid2(i, right1) && !stonedArea[i][right1]){
+                        manHuton = Math.abs(sr - i) + Math.abs(sc - right1);
+                        if(manHuton < minPath){
+                            targetx = i;
+                            targety = right1;
+                            minPath = manHuton;
+                            where =14;
+                        }
+                    }
+
                     // up1, left1
                     if(isValid2(up1, left1) && !stonedArea[up1][j] && !stonedArea[up1][left1]){
                         manHuton = Math.abs(sr - up1) + Math.abs(sc - left1);
@@ -205,17 +238,6 @@ public class Main {
                             targety = j;
                             minPath = manHuton;
                             where =5;
-                        }
-                    }
-
-                    // down1
-                    if(isValid2(down1, j) && !stonedArea[down1][j]){
-                        manHuton = Math.abs(sr - down1) + Math.abs(sc - j);
-                        if(manHuton < minPath){
-                            targetx = down1;
-                            targety = j;
-                            minPath = manHuton;
-                            where =6;
                         }
                     }
 
@@ -252,17 +274,6 @@ public class Main {
                         }
                     }
 
-                    // left1
-                    if(isValid2(i, left1) && !stonedArea[i][left1]){
-                        manHuton = Math.abs(sr - i) + Math.abs(sc - left1);
-                        if(manHuton < minPath){
-                            targetx = i;
-                            targety = left1;
-                            minPath = manHuton;
-                            where =10;
-                        }
-                    }
-
                     // left2
                     if(isValid2(i, left2) && !stonedArea[i][left1] && !stonedArea[i][left2]){
                         manHuton = Math.abs(sr - i) + Math.abs(sc - left2);
@@ -293,17 +304,6 @@ public class Main {
                             targety = left1;
                             minPath = manHuton;
                             where =13;
-                        }
-                    }
-
-                    // right1
-                    if(isValid2(i, right1) && !stonedArea[i][right1]){
-                        manHuton = Math.abs(sr - i) + Math.abs(sc - right1);
-                        if(manHuton < minPath){
-                            targetx = i;
-                            targety = right1;
-                            minPath = manHuton;
-                            where =14;
                         }
                     }
 
@@ -343,8 +343,6 @@ public class Main {
                     if(stopped.contains(i+","+j)){
                         movedMatrix[i][j] += matrix[i][j];
                     }else{
-
-                        //
                         if(matrix[targetx][targety] == -1){
                             warAttack += matrix[i][j];
                         }else{
