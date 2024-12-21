@@ -1,3 +1,5 @@
+
+
 import java.io.*;
 import java.util.*;
 
@@ -108,6 +110,12 @@ public class Main {
             warMove = 0; warStone = 0; warAttack = 0;
             // 1) 뱀 이동
             medusaMove(p);
+
+            if(sr == er && sc == ec){
+                System.out.println("0");
+                return;
+            }
+
             // 2) 뱀 공격
             HashSet<String> stopped = medusaAttack();
             /*for(int i = 0; i<n; i++){
@@ -119,16 +127,12 @@ public class Main {
             // 3) 전사 이동 & 전사공격
             //System.out.println(stopped);
             warriorMove(stopped);
+            //System.out.println();
 
             System.out.println(warMove + " " + warStone + " " + warAttack);
-            //System.out.println();
-            lastCheck ++;
-
-            if(lastCheck == paths.peek().toString().length()){
-                System.out.println("0");
-                break;
-            }
         }
+
+        System.out.println("0");
     }
 
     static int warMove, warStone, warAttack;
