@@ -111,7 +111,10 @@ public class Main {
             // 2) 뱀 공격
             HashSet<String> stopped = medusaAttack();
             /*for(int i = 0; i<n; i++){
-                System.out.println(Arrays.toString(stonedArea[i]));
+                for(int j = 0; j<n; j++){
+                    System.out.print(stonedArea[i][j]? "돌 ": "O  ");
+                }
+                System.out.println();
             }*/
             // 3) 전사 이동 & 전사공격
             //System.out.println(stopped);
@@ -167,16 +170,6 @@ public class Main {
                         }
                     }
 
-                    // up2
-                    if(isValid2(up2, j) && !stonedArea[up1][j] && !stonedArea[up2][j]){
-                        manHuton = Math.abs(sr - up2) + Math.abs(sc - j);
-                        if(manHuton < minPath){
-                            targetx = up2;
-                            targety = j;
-                            minPath = manHuton;
-                        }
-                    }
-
                     // up1, left1
                     if(isValid2(up1, left1) && !stonedArea[up1][j] && !stonedArea[up1][left1]){
                         manHuton = Math.abs(sr - up1) + Math.abs(sc - left1);
@@ -197,21 +190,21 @@ public class Main {
                         }
                     }
 
-                    // down1
-                    if(isValid2(down1, j) && !stonedArea[down1][j]){
-                        manHuton = Math.abs(sr - down1) + Math.abs(sc - j);
+                    // up2
+                    if(isValid2(up2, j) && !stonedArea[up1][j] && !stonedArea[up2][j]){
+                        manHuton = Math.abs(sr - up2) + Math.abs(sc - j);
                         if(manHuton < minPath){
-                            targetx = down1;
+                            targetx = up2;
                             targety = j;
                             minPath = manHuton;
                         }
                     }
 
-                    // down2
-                    if(isValid2(down2, j) && !stonedArea[down1][j] && !stonedArea[down2][j]){
-                        manHuton = Math.abs(sr - down2) + Math.abs(sc - j);
+                    // down1
+                    if(isValid2(down1, j) && !stonedArea[down1][j]){
+                        manHuton = Math.abs(sr - down1) + Math.abs(sc - j);
                         if(manHuton < minPath){
-                            targetx = down2;
+                            targetx = down1;
                             targety = j;
                             minPath = manHuton;
                         }
@@ -233,6 +226,16 @@ public class Main {
                         if(manHuton < minPath){
                             targetx = down1;
                             targety = right1;
+                            minPath = manHuton;
+                        }
+                    }
+
+                    // down2
+                    if(isValid2(down2, j) && !stonedArea[down1][j] && !stonedArea[down2][j]){
+                        manHuton = Math.abs(sr - down2) + Math.abs(sc - j);
+                        if(manHuton < minPath){
+                            targetx = down2;
+                            targety = j;
                             minPath = manHuton;
                         }
                     }
