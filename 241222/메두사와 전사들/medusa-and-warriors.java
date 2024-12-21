@@ -1,5 +1,4 @@
 
-
 import java.io.*;
 import java.util.*;
 
@@ -364,6 +363,38 @@ public class Main {
         warr[2] = medusaAttackLeft();
         warr[3] = medusaAttackRight();
 
+        /*for(int i = 0; i<n; i++){
+            for(int j = 0; j<n; j++){
+                System.out.print(stonnedUp[i][j]? "돌 ": "O  ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+
+        for(int i = 0; i<n; i++){
+            for(int j = 0; j<n; j++){
+                System.out.print(stonnedDown[i][j]? "돌 ": "O  ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+
+        for(int i = 0; i<n; i++){
+            for(int j = 0; j<n; j++){
+                System.out.print(stonnedLeft[i][j]? "돌 ": "O  ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+        for(int i = 0; i<n; i++){
+            for(int j = 0; j<n; j++){
+                System.out.print(stonnedRight[i][j]? "돌 ": "O  ");
+            }
+            System.out.println();
+        }*/
+
+
+
         List<int[]> makeAtt = new ArrayList<>();
         int stoned = -1;
         for(int i = 0; i<4; i++){
@@ -495,7 +526,7 @@ public class Main {
 
         index = sc-1;
         attX = -1; attY = -1;
-        for(int i = sr -1; i>=0; i--){
+        for(int i = sr - 1; i>=0; i--){
             for(int j = index; j>=0; j--){
                 if(attX != -1 && attY != -1 && (Math.abs(attX - i) == Math.abs(attY - j)) && attX > i && attY > j){
                     break;
@@ -503,6 +534,8 @@ public class Main {
                 stonnedLeft[i][j] = true;
                 if(matrix[i][j] >= 1){
                     war.add(new int[]{i, j});
+                    attX = i;
+                    attY = j;
                     break;
                 }
             }
